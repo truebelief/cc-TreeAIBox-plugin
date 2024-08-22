@@ -22,7 +22,7 @@ Make sure the scikit-image version is correct.
 ## Basic Modules (Updated Aug 22, 2024)
 
 ### WoodCls
-
+![image](https://github.com/user-attachments/assets/d5df6a25-bd46-4e4f-a735-73d729957a76)
 This module classifies the stem and branch components from a tree scan based on the 3D SegFormer deep learning model.
 
 - Please download the model before applying the classification.
@@ -30,7 +30,7 @@ This module classifies the stem and branch components from a tree scan based on 
 - More trained AI models will be added in the future.
 
 ### QSM
-
+![image](https://github.com/user-attachments/assets/5513699e-56e7-4f2a-a25d-3b33f8a74fea)
 This module reconstructs wood architecture from a tree scan. There's much space for improvement.
 
 - The initial segmentation isolates point clusters.
