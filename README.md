@@ -23,6 +23,8 @@ Make sure the scikit-image version is correct. You can either use the Python pac
 
 > **Important:** If you have installed CloudCompare to Program Files, there might be issues with pip being prohibited from installing to the default site-package folder. Please run pip command or launch the CloudCompare as the administrator.
 
+I avoid using excessive dependencies unless speed optimization is essential. Simplicity is an art.
+
 ## Basic Modules (Updated Aug 22, 2024)
 
 ### WoodCls
@@ -62,6 +64,6 @@ Future upgrades may include an AI-based version of this tool.
 
 5. **Performance on certain tree types:** Current algorithm works poorly on branchy and fat trees (tropical trees).
 
+
 <video src='https://github.com/user-attachments/assets/bf5f7b6a-5a50-43ba-876b-29e5c9cbff03' width=180/>
 
-I avoid using excessive dependencies unless speed optimization is essential. Simplicity is an art.
