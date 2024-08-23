@@ -6,6 +6,8 @@ This is a Python Plugin for CloudCompare. You can register the python file `Tree
 
 **Note:** Tested only in Windows OS, RTX3090 (VRAM: 24GB) With CUDA
 
+<img src="https://github.com/user-attachments/assets/dcf4e7de-adea-493f-9fff-04e082efa2d1" width="30%" alt="20240822_TreeAIBoxQSM">
+
 ## Requirements
 
 There are several Python library dependencies:
