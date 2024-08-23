@@ -1,10 +1,10 @@
 # <img src="./img/logo.png" width="30" alt="GitHub Logo"> cc-TreeAIBox-plugin
 
-AI-Enhanced Toolset for 3D Tree Processing: A CloudCompare Plugin
+AI-Enhanced Toolset for 3D Tree Processing: A CloudCompare Plugin (alpha 0.1)
 
-This is a Python Plugin for CloudCompare. You can register the python file `TreeAIBox.py` as the main program.
+This is a Python Plugin for CloudCompare. You can register the python file `TreeAIBox.py` as the main program. This is just a fresh version with bugs and imperfections. I will release a stable version after enough tests.
 
-**Note:** Tested only in Windows OS, RTX3090 (VRAM: 24GB) With CUDA
+**Note:** Tested only in Windows OS, RTX3090 (VRAM: 24GB) With CUDA; I am currently making the TreeAIBox installable akin to the 3DFin plugin, thanks to Romain Janvier's suggestion!
 
 <img src="https://github.com/user-attachments/assets/dcf4e7de-adea-493f-9fff-04e082efa2d1" width="30%" alt="20240822_TreeAIBoxQSM">
 
