@@ -8,6 +8,7 @@ This is a Python Plugin for CloudCompare. You can register the python file `Tree
 
 <img src="https://github.com/user-attachments/assets/dcf4e7de-adea-493f-9fff-04e082efa2d1" width="30%" alt="20240822_TreeAIBoxQSM">
 
+
 ## Requirements
 
 There are several Python library dependencies:
@@ -60,4 +61,5 @@ Future upgrades may include an AI-based version of this tool.
 
 5. **Performance on certain tree types:** Current algorithm works poorly on branchy and fat trees (tropical trees).
 
+<video src='https://github.com/user-attachments/assets/bf5f7b6a-5a50-43ba-876b-29e5c9cbff03' width=180/>
 
