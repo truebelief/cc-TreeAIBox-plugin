@@ -64,3 +64,4 @@ Future upgrades may include an AI-based version of this tool.
 
 <video src='https://github.com/user-attachments/assets/bf5f7b6a-5a50-43ba-876b-29e5c9cbff03' width=180/>
 
+I avoid using excessive dependencies unless speed optimization is essential. Simplicity is an art.
