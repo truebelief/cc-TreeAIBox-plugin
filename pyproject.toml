@@ -21,26 +21,27 @@ classifiers = [
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: Implementation :: CPython",
   "Topic :: Scientific/Engineering",
-  "Topic :: Scientific/Engineering :: GIS",
+  "Topic :: Scientific/Engineering :: Computer Vision",
   "Intended Audience :: Science/Research",
 ]
 dependencies = [
-  "lazrs~=0.6.0",
-  "pandas~=2.2.0",
-  "XlsxWriter~=3.2.0",
-  "dendromatics~=0.5.0",
-  "pydantic~=1.10.15",
-  "pyqt5~=5.15.0"
+  "torch~=2.3.1+cu118",
+  "scikit-image==0.22.0",
+  "timm~=0.9.16",
+  "pyqt5~=5.15.0",
+  "numpy_groupies~=0.11.2",
+  "numpy_indexed~=0.3.7",
+  "scikit-learn~=0.22.0"
 ]
 dynamic = ["version"]
 
 # Entry point for CloudCompare plugin
 [project.entry-points."cloudcompare.plugins"]
-3DFin = "three_d_fin.cloudcompare.plugin:ThreeDFinCC"
+TreeAIBox = "tree_ai_box.cloudcompare.plugin:TreeAIBoxCC"
 
 # Entry point for GUI and CLI
 [project.scripts]
-3DFin = "three_d_fin.processing:launch_application"
+TreeAIBox = "tree_ai_box.processing:launch_application"
 
 [tool.hatch.version]
 path = "src/three_d_fin/__about__.py"
