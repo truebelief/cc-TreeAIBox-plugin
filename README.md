@@ -19,7 +19,7 @@ pip install torch torchvision torchaudio --index-url https://download.pytorch.or
 pip install scikit-image==0.22.0 timm numpy_groupies numpy_indexed scikit-learn
 ```
 
-Make sure the scikit-image version is correct. You can either use the Python package manager of the CloudCompare, or navigate to the default python interpreter of the CloudCompare and run the pip install commands via CLI.
+Make sure the scikit-image version is correct. The numpy version should be 1.xx (below 2.0). You can either use the Python package manager of the CloudCompare, or navigate to the default python interpreter of the CloudCompare and run the pip install commands via CLI.
 
 > **Important:** If you have installed CloudCompare to Program Files, there might be issues with pip being prohibited from installing to the default site-package folder. Please run pip command or launch the CloudCompare as the administrator.
 
