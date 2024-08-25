@@ -7,13 +7,13 @@ name = "TreeAIBox"
 description = "AI-Enhanced Toolset for 3D Tree Processing: A CloudCompare Plugin"
 readme = "README.md"
 requires-python = ">=3.9"
-license = "Apache-2.0-or-later"
+license = {text = "Apache License (2.0)"}
 keywords = ["lidar", "tree", "tls", "AI", "3D", "forestry"]
 authors = [
   { name = "zhouxin xi", email = "truebelief2010@gmail.com" },
 ]
 classifiers = [
-  "Development Status :: 1 - Alpha",
+  "Development Status :: 2 - Pre-Alpha",
   "Programming Language :: Python",
   "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
@@ -21,37 +21,36 @@ classifiers = [
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: Implementation :: CPython",
   "Topic :: Scientific/Engineering",
-  "Topic :: Scientific/Engineering :: GIS",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
   "Intended Audience :: Science/Research",
 ]
 dependencies = [
-  "lazrs~=0.6.0",
-  "pandas~=2.2.0",
-  "XlsxWriter~=3.2.0",
-  "dendromatics~=0.5.0",
-  "pydantic~=1.10.15",
-  "pyqt5~=5.15.0"
+  "scikit-image==0.22.0",
+  "timm==0.9.16",
+  "pyqt5~=5.15.0",
+  "numpy_groupies==0.11.2",
+  "numpy_indexed==0.3.7",
+  "scikit-learn==1.4.0"
 ]
 dynamic = ["version"]
 
 # Entry point for CloudCompare plugin
 [project.entry-points."cloudcompare.plugins"]
-3DFin = "three_d_fin.cloudcompare.plugin:ThreeDFinCC"
+TreeAIBox = "tree_ai_box.cloudcompare.plugin:TreeAIBoxCC"
 
 # Entry point for GUI and CLI
 [project.scripts]
-3DFin = "three_d_fin.processing:launch_application"
+TreeAIBox = "tree_ai_box.TreeAIBox::main"
 
 [tool.hatch.version]
-path = "src/three_d_fin/__about__.py"
+path = "src/tree_ai_box/__about__.py"
 
 [project.urls]
-Documentation = "https://github.com/3DFin/3DFin#README.md"
-Issues = "https://github.com/3DFin/3DFin/issues"
-Source = "https://github.com/3DFin/3DFin"
+Documentation = "https://github.com/truebelief/cc-TreeAIBox-plugin#README.md"
+Source = "https://github.com/truebelief/cc-TreeAIBox-plugin"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/three_d_fin"]
+packages = ["src/tree_ai_box"]
 
 [tool.hatch.build.targets.sdist]
 exclude = ["pyinstaller", "scripts", "qt-files", ".github"]
@@ -60,18 +59,17 @@ exclude = ["pyinstaller", "scripts", "qt-files", ".github"]
 [tool.hatch.envs.default.scripts]
 # qt
 qt-moc = [
-  "pyuic5 {args} qt-files/src/main_window.ui -o src/three_d_fin/gui/main_window.py --import-from=three_d_fin.gui --resource-suffix=", 
-  "pyuic5 {args} qt-files/src/expert_dlg.ui -o src/three_d_fin/gui/expert_dlg.py --import-from=three_d_fin.gui --resource-suffix="
+  "pyuic5 {args} qt-files/src/form.ui -o src/tree_ai_box/gui/form.py --import-from=tree_ai_box.gui --resource-suffix=",
 ]
-qt-ressource = "pyrcc5 {args} qt-files/src/gui_ressources.qrc -o src/three_d_fin/gui/gui_ressources.py"
+qt-ressource = "pyrcc5 {args} qt-files/src/form.qrc -o src/tree_ai_box/gui/form_ressources.py"
 qt-all = ["qt-moc", "qt-ressource"]
 
 [tool.hatch.build.targets.sdist.hooks.custom]
 dependencies = ["pyqt5~=5.15"]
 path = "scripts/qt_build_hook.py"
 src_folder = "qt-files/src"
-dest_folder = "src/three_d_fin/gui"
-import_from = "three_d_fin.gui" # TODO: it could be infered from dest_folder
+dest_folder = "src/tree_ai_box/gui"
+import_from = "tree_ai_box.gui" # TODO: it could be infered from dest_folder
 
 # PyInstaller builder
 [tool.hatch.build.targets.custom]
@@ -86,8 +84,8 @@ require-runtime-dependencies = true
 dependencies = ["pyqt5~=5.15.0"]
 path = "scripts/qt_build_hook.py"
 src_folder = "qt-files/src"
-dest_folder = "src/three_d_fin/gui"
-import_from = "three_d_fin.gui" # TODO: it could be infered from dest_folder
+dest_folder = "src/tree_ai_box/gui"
+import_from = "tree_ai_box.gui" # TODO: it could be infered from dest_folder
 
 [[tool.hatch.envs.test.matrix]]
 python = ["39", "310", "311", "312"]
@@ -95,7 +93,7 @@ python = ["39", "310", "311", "312"]
 [tool.coverage.run]
 branch = true
 parallel = true
-omit = ["src/three_d_fin/__about__.py"]
+omit = ["src/tree_ai_box/__about__.py"]
 
 [tool.coverage.report]
 exclude_lines = ["no cov", "if __name__ == .__main__.:", "if TYPE_CHECKING:"]
@@ -106,7 +104,7 @@ dependencies = ["mypy>=1.2.0"]
 
 [tool.hatch.envs.lint.scripts]
 # static analysis with ruff
-check-type = "mypy --install-types --non-interactive {args:src/three_d_fin tests}"
+check-type = "mypy --install-types --non-interactive {args:src/tree_ai_box tests}"
 check-static = "hatch fmt -l --check"
 check-format = "hatch fmt -f --check"
 fix-static = "hatch fmt -l"
@@ -135,7 +133,7 @@ ignore = [
 ]
 
 [tool.ruff.lint.isort]
-known-first-party = ["three_d_fin", "dendromatics"]
+known-first-party = ["tree_ai_box"]
 
 [tool.ruff.lint.flake8-tidy-imports]
 ban-relative-imports = "all"
