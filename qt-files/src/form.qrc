@@ -1,0 +1,9 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <qresource prefix="/img">
+        <file>../img/logo.png</file>
+        <file>../img/woodcls_branch.png</file>
+        <file>../img/woodcls_stem.png</file>
+        <file>../img/branchreconstruction.png</file>
+    </qresource>
+</RCC>
