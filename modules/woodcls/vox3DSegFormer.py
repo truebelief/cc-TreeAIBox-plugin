@@ -335,7 +335,7 @@ class Segformer(nn.Module):
         return outs
 
     def forward(self, x):
-        x=x.half()
+        #x=x.half()
         d_out, h_out, w_out = x.size()[2], x.size()[3], x.size()[4]
 
         x = self.forward_features(x)
