@@ -30,7 +30,10 @@ def applyWoodCls(config_file,pcd,model_path,use_cuda=True,progress_bar=None):
     drop_rate = configs["model"]["drop_rate"]
     drop_path_rate = configs["model"]["drop_path_rate"]
 
-    from .vox3DSegFormer import Segformer
+    try:
+        from vox3DSegFormer import Segformer
+    except:
+        from .vox3DSegFormer import Segformer
 
 
     model = Segformer(
