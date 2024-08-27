@@ -52,17 +52,23 @@ Future upgrades may include an AI-based version of this tool.
 ## Known Issues
 
 1. **Occasionally flashing:** Sometimes the program will flash due to the computation overhead.
+Please check first if your pytorch+cuda is installed properly. Note that pytorch may not be compatible with most recent CUDA versions (e.g. 12.4+) which might need be downgraded to a previous version (e.g. 12.1).
 
-2. **Curve issues:**
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/52d0ede8-ff71-4015-ad87-5b948388df64" width="30%">
+  <img src="https://github.com/user-attachments/assets/80b452a0-793d-45d4-99ea-27ae5f088eaf" width="30%">
+</div>
+
+3. **Curve issues:**
    - The Bezier curve is overly bent;
    - The node connection sometimes is poor. The current version of my QSM is sensitive to the point gaps;
    - The joints between two branches sometimes do not follow the point cloud forms
    
-3. **Short stems and branches:** The final curves and meshes do not fully capture the length of stems and branches. This is because centroids from initial segments were used as nodes, whereas branch tips need to be added as tree nodes.
+4. **Short stems and branches:** The final curves and meshes do not fully capture the length of stems and branches. This is because centroids from initial segments were used as nodes, whereas branch tips need to be added as tree nodes.
 
-4. **Mesh visualization:** Need to visualize the meshes directly, instead of saving and loading the meshes.
+5. **Mesh visualization:** Need to visualize the meshes directly, instead of saving and loading the meshes.
 
-5. **Performance on certain tree types:** Current algorithm works poorly on branchy and fat trees (tropical trees).
+6. **Performance on certain tree types:** Current algorithm works poorly on branchy and fat trees (tropical trees).
 
 
 <video src='https://github.com/user-attachments/assets/bf5f7b6a-5a50-43ba-876b-29e5c9cbff03' width=180/>
