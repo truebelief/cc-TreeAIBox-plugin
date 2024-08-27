@@ -53,7 +53,7 @@ def applyWoodCls(config_file,pcd,model_path,use_cuda=True,progress_bar=None):
     )
 
     if use_cuda:
-        model = model.cuda()
+        model = model.half().cuda()
     model.eval()
 
     if progress_bar:
