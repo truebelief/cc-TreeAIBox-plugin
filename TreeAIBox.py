@@ -23,7 +23,7 @@ import requests
 # https://github.com/CloudCompare/CloudCompare/blob/master/CONTRIBUTING.md
 # requirements:
 # python -m pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
-# pip install scikit-image==0.22.0, timm,numpy_groupies,numpy_indexed,json,sklearn
+# pip install scikit-image==0.22.0, timm,numpy_groupies,numpy_indexed,json,sklearn,circle-fit
 
 CC = pycc.GetInstance()
 from PyQt5.QtWidgets import QMessageBox
@@ -286,7 +286,8 @@ class TreeAIBox(QtWidgets.QMainWindow):
                     woodcls_mode = "branch"
                 else:
                     woodcls_mode = "stem"
-                config_file = os.path.join(os.path.dirname(os.path.realpath(__file__)), f'modules\\woodcls\\{woodcls_mode}ClsConfig.json')
+
+                config_file = os.path.join(os.path.dirname(os.path.realpath(__file__)), f'modules\\woodcls\\{self.comboPretrainWoodCls.currentText()}.json')
                 model_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), self.MODEL_LOCAL_PATH + "\\" + str(self.comboPretrainWoodCls.currentText()) + ".pth")
 
                 from modules.woodcls import woodCls

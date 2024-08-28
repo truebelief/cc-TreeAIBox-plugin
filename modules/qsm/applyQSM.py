@@ -7,6 +7,7 @@ from scipy.sparse import csr_matrix
 from scipy.sparse.csgraph import dijkstra
 from scipy.spatial import cKDTree
 from scipy import interpolate
+from scipy.signal import medfilt
 
 from sklearn.cluster import mean_shift
 from circle_fit import riemannSWFLa
@@ -15,8 +16,7 @@ import xml.etree.ElementTree as ET
 from xml.dom import minidom
 
 
-# NEED TO IMPROVE: The beizer curve is sometimes overly bent.
-# The centroids do not represent the full branch length, tips need to be added.
+# NEED TO IMPROVE:
 # The progress bar value is better to be updated with a callback function
 # Need to visualize the meshes directly, instead of saving and loading the meshes.
 # Current algorithm works poorly on the branchy and fat trees (tropical trees); But this can be improved without much difficulty.
@@ -69,7 +69,6 @@ def saveTreeToXML(tree_list,attribute_list,filename):
         file.write(xml_str)
 
 
-
 def removeNanVerticesAndAdjustFaces(vertices, faces):
     vertices = np.array(vertices)
     faces = np.array(faces)
@@ -79,15 +78,16 @@ def removeNanVerticesAndAdjustFaces(vertices, faces):
     adjusted_faces = index_map[faces]
     valid_faces = adjusted_faces[~(adjusted_faces < 0).any(axis=1)]
     return filtered_vertices.tolist(), valid_faces.tolist()
-def saveTreeToObj(tree_centroid_radius,fname, num_segments=50, num_sides=16):
+
+def saveTreeToObj(tree_centroid_radius,fname, interval_distance=0.05, num_sides=16):
     all_vertices = []
     all_faces = []
     vertex_offset = 0
     for curve_nodes in tree_centroid_radius:
         if len(curve_nodes) <= 3:
-            vertices, faces = createLineTube(curve_nodes, num_segments, num_sides)
+            vertices, faces = createLineTube(curve_nodes, interval_distance, num_sides)
         else:
-            vertices, faces = createBezierTube(curve_nodes, num_segments, num_sides)
+            vertices, faces = createBezierTube(curve_nodes, interval_distance, num_sides)
         # Remove NaN vertices and adjust faces
         vertices, faces = removeNanVerticesAndAdjustFaces(vertices, faces)
         # Adjust face indices based on the current vertex offset
@@ -103,26 +103,75 @@ def saveTreeToObj(tree_centroid_radius,fname, num_segments=50, num_sides=16):
         for face in all_faces:
             f.write(f"f {face[0] + 1} {face[1] + 1} {face[2] + 1} {face[3] + 1}\n")
 
-def createBezierTube(nodes, num_segments=50, num_sides=16):
+def constrain_radii(radii, max_factor=1.1):
+    constrained_radii = [radii[0]]
+    for r in radii[1:]:
+        max_allowed = constrained_radii[-1] * max_factor
+        constrained_radii.append(min(r, max_allowed))
+    return np.array(constrained_radii)
+
+def createLineTube(nodes, interval_distance=0.1, num_sides=16):
     coords = np.array([node[:3] for node in nodes])
     radii = np.array([node[3] for node in nodes])
-    # Generate Bezier curve
+
+    # Extend the start and end points
+    start_extension = coords[0] - 0.5 * (coords[1] - coords[0])
+    end_extension = coords[-1] + 0.5 * (coords[-1] - coords[-2])
+
+    extended_coords = np.vstack((start_extension, coords, end_extension))
+
+    # Extend radii (using the same radius for extended points)
+    extended_radii = np.hstack((radii[0], radii, radii[-1]))
+
+    # Calculate total length of the extended path
+    path_length = np.sum(np.linalg.norm(np.diff(extended_coords, axis=0), axis=1))
+
+    # Calculate number of segments based on interval distance
+    num_segments = max(2, int(path_length / interval_distance))
+
+    # Generate points along the extended line
     t = np.linspace(0, 1, num_segments)
-    tck, u = interpolate.splprep(coords.T, s=0)
-    points = np.array(interpolate.splev(t, tck)).T
-    # Interpolate radii along the curve
-    radii_interpolator = interpolate.interp1d(np.linspace(0, 1, len(radii)), radii)
-    interpolated_radii = radii_interpolator(t)
+    points = np.array([np.interp(t, np.linspace(0, 1, len(extended_coords)), extended_coords[:, i]) for i in range(3)]).T
+
+    # Interpolate radii along the extended line
+    interpolated_radii = np.interp(t, np.linspace(0, 1, len(extended_radii)), extended_radii)
+
     return generateTubeMesh(points, interpolated_radii, num_sides)
 
-def createLineTube(nodes, num_segments=50, num_sides=16):
+
+def createBezierTube(nodes, interval_distance=0.1, num_sides=16):
     coords = np.array([node[:3] for node in nodes])
     radii = np.array([node[3] for node in nodes])
-    # Generate points along the line(s)
+
+    # Extend the start and end points
+    start_extension = coords[0] - 0.5 * (coords[1] - coords[0])
+    end_extension = coords[-1] + 0.5 * (coords[-1] - coords[-2])
+
+    extended_coords = np.vstack((start_extension, coords, end_extension))
+
+    # Extend radii (using the same radius for extended points)
+    extended_radii = np.hstack((radii[0], radii, radii[-1]))
+
+    # Generate initial Bezier curve with a reasonable number of points
+    initial_points = 100
+    t_initial = np.linspace(0, 1, initial_points)
+    tck, u = interpolate.splprep(extended_coords.T, s=0)
+    points_initial = np.array(interpolate.splev(t_initial, tck)).T
+
+    # Calculate total length of the path
+    path_length = np.sum(np.linalg.norm(np.diff(points_initial, axis=0), axis=1))
+
+    # Calculate number of segments based on interval distance
+    num_segments = max(2, int(path_length / interval_distance))
+
+    # Generate final points
     t = np.linspace(0, 1, num_segments)
-    points = np.array([np.interp(t, np.linspace(0, 1, len(coords)), coords[:, i]) for i in range(3)]).T
-    # Interpolate radii along the line(s)
-    interpolated_radii = np.interp(t, np.linspace(0, 1, len(radii)), radii)
+    points = np.array(interpolate.splev(t, tck)).T
+
+    # Interpolate radii along the curve
+    radii_interpolator = interpolate.interp1d(np.linspace(0, 1, len(extended_radii)), extended_radii)
+    interpolated_radii = radii_interpolator(t)
+
     return generateTubeMesh(points, interpolated_radii, num_sides)
 
 def generateTubeMesh(points, radii, num_sides):#there might be bugs in this function
@@ -160,7 +209,6 @@ def generateTubeMesh(points, radii, num_sides):#there might be bugs in this func
                 v4 = (i + 1) * num_sides + j
                 faces.append((v1, v2, v3, v4))
     return vertices, faces
-
 
 def findNearestTarget(graph,target_indices,max_graph_distance=np.inf):
     # Compute the shortest paths to all targets
@@ -400,12 +448,20 @@ def calculateRadius(pts,tree,segs_centroids,min_r=0.04):# this needs to be impro
                 segs_prj_2d=pts[segs_centroids_group[node],:2] - np.outer(segs_prj, segs_centroid_dir[i,:3])[:, :2]
                 r0=np.median(np.sqrt(np.sum(np.power(segs_prj_2d-np.mean(segs_prj_2d,0),2),axis=1)))
                 xc, yc, r, sigma = riemannSWFLa(segs_prj_2d)
-                if sigma/r>0.3 or r>0.1:#only fit circles when the branches or stems are large enough
+                if sigma/r>0.3:#only fit circles when the branches or stems are large enough
                     path_centroid_radius.append(np.array([segs_centroids[node,0],segs_centroids[node,1],segs_centroids[node,2],r0]))
                 else:
-                    path_centroid_radius.append(np.array([xc,yc,segs_centroids[node,2],np.minimum(r,r0*1.2)]))
+                    # path_centroid_radius.append(np.array([xc,yc,segs_centroids[node,2],np.minimum(r,r0*1.2)]))
+                    path_centroid_radius.append(np.array([segs_centroids[node,0],segs_centroids[node,1],segs_centroids[node,2],np.minimum(r,r0*1.2)]))
             else:
                 path_centroid_radius.append(np.array([segs_centroids[node,0],segs_centroids[node,1],segs_centroids[node,2],min_r]))
+
+        if len(path_centroid_radius)>3:
+            # Apply moving median filter to the radii
+            radii = np.array([node[3] for node in path_centroid_radius])
+            filtered_radii = medfilt(radii, kernel_size=3)
+            for i, filtered_radius in enumerate(filtered_radii):
+                path_centroid_radius[i][3] = filtered_radius
 
         path_centroid_radius.insert(0,np.array([segs_centroids[path[0],0],segs_centroids[path[0],1],segs_centroids[path[0],2],path_centroid_radius[0][-1]]))
         tree_centroid_radius.append(path_centroid_radius)
@@ -451,3 +507,16 @@ def applyQSM(pts,k_neighbors=6,max_graph_distance=40, max_connectivity_search_di
     if progress_bar:
         progress_bar.setValue(80)
     return tree, segs_centroids,segs_labels,tree_centroid_radius
+
+# if __name__ == '__main__':
+#     path_to_las = r"F:\prj\CC2\comp\test_data\branch\P5T1_clean.las"
+#     import os
+#     import laspy
+#     pcd_basename = os.path.basename(path_to_las)[:-4]
+#     las = laspy.read(path_to_las)
+#     columns = np.transpose([las.x, las.y, las.z,las.stemcls,las.init_segs])
+#     columns=columns[las.branchcls>1]
+#     columns[:,-2]=columns[:,-2]-np.min(columns[:,-2])
+#     tree, segs_centroids,segs_labels,tree_centroid_radius=applyQSM(columns)
+#     saveTreeToObj(tree_centroid_radius, "tmp.obj")
+#     xml_output = saveTreeToXML(tree,tree_centroid_radius,"tmp.xml")

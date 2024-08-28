@@ -1,5 +1,6 @@
 [
 "woodcls_stem_tls_segformer3D_112_20cm(GPU8GB)",
+"woodcls_stem_tls_segformer3D_112_4cm(GPU12GB)",
 "woodcls_branch_tls_segformer3D_112_4cm(GPU8GB)",
 "mixedwood_uav_treeisonet_stemcls_112_20cm",
 "boreal_als_treeisonet_stembase_128_50cm",

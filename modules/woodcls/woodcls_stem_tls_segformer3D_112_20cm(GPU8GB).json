@@ -1,0 +1,18 @@
+{
+  "title": "stemcls",
+  "model": {
+    "type": "SegFormer",
+    "voxel_number_in_block": [112,112,112],
+    "voxel_resolution_in_meter": [0.2,0.2,0.3],
+    "patch_size": 3,
+    "decoder_dim": 128,
+    "channel_dims": [32, 64, 160, 256],
+    "SR_ratios": [4, 2, 2, 1],
+    "num_heads": [1, 2, 5, 8],
+    "MLP_ratios": [4, 4, 4, 4],
+    "depths": [2, 2, 2, 2],
+    "qkv_bias": true,
+    "drop_rate": 0.0,
+    "drop_path_rate": 0.1
+  }
+}
