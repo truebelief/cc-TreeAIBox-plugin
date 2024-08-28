@@ -16,7 +16,7 @@ There are several Python library dependencies:
 
 ```bash
 pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
-pip install scikit-image==0.22.0 timm numpy_groupies numpy_indexed scikit-learn circle-fit
+pip install scikit-image==0.22.0 timm numpy-groupies numpy-indexed scikit-learn circle-fit
 ```
 
 Make sure the scikit-image version is correct. The numpy version should be 1.xx (below 2.0). You can either use the Python package manager of the CloudCompare, or navigate to the default python interpreter of the CloudCompare and run the pip install commands via CLI.
