@@ -23,7 +23,6 @@ Make sure the scikit-image version is correct. The numpy version should be 1.xx 
 
 > **Important:** If you have installed CloudCompare to Program Files, there might be issues with pip being prohibited from installing to the default site-package folder. Please run pip command or launch the CloudCompare as the administrator.
 
-I avoid using excessive dependencies unless speed optimization is essential. Simplicity is an art.
 
 ## Basic Modules (Updated Aug 22, 2024)
 
@@ -60,7 +59,6 @@ Please check first if your pytorch+cuda is installed properly. Note that pytorch
 </div>
 
 3. **Curve issues:**
-   - The Bezier curve is overly bent;
    - The node connection sometimes is poor. The current version of my QSM is sensitive to the point gaps;
    - The joints between two branches sometimes do not follow the point cloud forms
    
@@ -70,6 +68,8 @@ Please check first if your pytorch+cuda is installed properly. Note that pytorch
 
 6. **Performance on certain tree types:** Current algorithm works poorly on branchy and fat trees (tropical trees).
 
+## UPDATES
+(Sept 20, 2024)I've updated WoodCls.py with a main function and created a model folder containing the trained branchcls model. To use your own data, simply replace the las/laz files in the data folder and execute the main function from WoodCls.py if you encounter any issues on the CloudCompare platform. The output will be laz files stored in a newly created output folder located in the same directory as WoodCls.py.
 
 <video src='https://github.com/user-attachments/assets/bf5f7b6a-5a50-43ba-876b-29e5c9cbff03' width=180/>
 
