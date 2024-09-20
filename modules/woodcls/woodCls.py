@@ -149,17 +149,19 @@ if __name__ == "__main__":
 
     config_file=os.path.join("woodcls_branch_tls_segformer3D_112_4cm(GPU8GB).json")
     data_dir="../../data"
-    pcd_fname = glob.glob(os.path.join(data_dir, "*.la*"))[0]
+    pcd_fnames = glob.glob(os.path.join(data_dir, "*.la*"))
     model_path="../../models/woodcls_branch_tls_segformer3D_112_4cm(GPU8GB).pth"
     out_path="output"
 
     if not os.path.exists(out_path):
         os.mkdir(out_path)
 
-    las = laspy.open(pcd_fname).read()
-    pcd = np.transpose(np.array([las.x, las.y, las.z]))  # las.point_format.dimension_names
-    pcd_pred=apply_wood_cls(config_file,pcd,model_path,use_cuda=True,progress_bar=None)
+    for pcd_fname in pcd_fnames:
+        print(f"Processing {pcd_fname}...")
+        las = laspy.open(pcd_fname).read()
+        pcd = np.transpose(np.array([las.x, las.y, las.z]))  # las.point_format.dimension_names
+        pcd_pred=apply_wood_cls(config_file,pcd,model_path,use_cuda=True,progress_bar=None)
 
-    las.add_extra_dim(laspy.ExtraBytesParams(name="branchcls", type="int32", description="Predicted branch points"))
-    las.branchcls = pcd_pred
-    las.write(os.path.join(out_path, f"{os.path.basename(pcd_fname)[:-4]}_branchcls.laz"))
+        las.add_extra_dim(laspy.ExtraBytesParams(name="branchcls", type="int32", description="Predicted branch points"))
+        las.branchcls = pcd_pred
+        las.write(os.path.join(out_path, f"{os.path.basename(pcd_fname)[:-4]}_branchcls.laz"))
