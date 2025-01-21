@@ -4,6 +4,8 @@ AI-Enhanced Toolset for 3D Tree Processing: A CloudCompare Plugin (alpha 0.1)
 
 This is a Python Plugin for CloudCompare. You can register the python file `TreeAIBox.py` as the main program. This is just a fresh prototype with bugs and imperfections. I will release a stable version after enough tests. The code format also needs standardization.
 
+**Note (Jan-21-2024):** The main program on tree segmentation will be uploaded by the end of Feburary 2024.
+
 **Note:** Tested only in Windows OS, RTX3090 (VRAM: 24GB) With CUDA; I am currently making the TreeAIBox installable akin to the 3DFin plugin, thanks to Romain Janvier's suggestion!
 
 <div align="center">
