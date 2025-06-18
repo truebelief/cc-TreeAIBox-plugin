@@ -1,3 +1,10 @@
+> **## Update:** The official **TreeAIBox** plugin is now published at  
+> [NRCan/TreeAIBox on GitHub](https://github.com/NRCan/TreeAIBox)  
+> Please use that repository for the latest features.
+
+Please use that repository for the latest features.
+
+
 # <img src="./img/logo.png" width="30" alt="GitHub Logo"> cc-TreeAIBox-plugin
 
 AI-Enhanced Toolset for 3D Tree Processing: A CloudCompare Plugin (alpha 0.1)
